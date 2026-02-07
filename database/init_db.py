@@ -1,16 +1,18 @@
+import asyncio
 from database.connection import engine, Base
-
 from database.models import Message
 
-def create_tables():
-    Base.metadata.create_all(engine)
-    print("Tables created successfully")    
+async def create_tables():
+    """Create all tables asynchronously"""
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+    print("✅ Tables created successfully")    
 
+async def drop_tables():
+    """Drop all tables asynchronously"""
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.drop_all)
+    print("✅ Tables dropped successfully")    
 
-def drop_tables():
-    Base.metadata.drop_all(engine)
-    print("Tables dropped successfully")    
-
-
-if __name__=="__main__":
-    create_tables()
+if __name__ == "__main__":
+    asyncio.run(create_tables())

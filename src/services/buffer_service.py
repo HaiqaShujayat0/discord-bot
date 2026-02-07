@@ -110,3 +110,39 @@ def delete_message(message_id):
     finally:
         db.close()
 
+def get_messages(guild_id=None,channel_id=None,author_id=None,from_date=None,to_date=None,has_attachments=None,limit=20):
+
+    db=SessionLocal()
+
+    try:
+        query=db.query(Message).filter(
+            Message.guild_id==guild_id,
+            Message.deleted_at==None #acive msg not deleted 
+        )
+    
+        if channel_id:
+            query=query.filter(Message.channel_id==channel_id)
+
+        if author_id:
+            query=query.filter(Message.author_id==author_id)
+
+        if from_date:
+            query=query.filter(Message.created_at>=from_date)
+
+        if to_date: 
+            query=query.filter(Message.created_at<=to_date)
+
+        if has_attachments:
+            query=query.filter(Message.has_attachments==True)
+
+
+        messages=query.order_by(Message.created_at.desc()).limit(limit).all()
+
+        return messages
+
+    except Exception as e:
+        print(f"error getting messages: {e}")
+        return []
+
+    finally:
+        db.close()
