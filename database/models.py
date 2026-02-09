@@ -22,7 +22,7 @@ class Message(Base):
     has_embeds = Column(Boolean, default=False)
     reaction_count = Column(BigInteger, default=0)
 
-    # Separate JSON columns for easier querying (clean approach)
+    # Separate JSON columns for easier querying 
     attachments_data = Column(JSON, nullable=True)  # Array of attachment objects
     embeds_data = Column(JSON, nullable=True)  # Array of embed objects
     reactions_data = Column(JSON, nullable=True)  # Array of reaction objects
