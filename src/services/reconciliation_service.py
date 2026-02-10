@@ -54,7 +54,7 @@ async def reconcile_channel(channel: discord.TextChannel, chunk_size: int = 100)
             print(f"    ✅ #{channel.name}: up to date")
             
         # Yield control to event loop (don't block other tasks)
-        await asyncio.sleep(0.1)
+        # await asyncio.sleep(0.1)
         
         return added_count, deleted_count
         

@@ -185,6 +185,7 @@ class MessageSearchView(discord.ui.View):
         self.from_date = None
         self.to_date = None
         self.reaction_filter = "any"
+
     
     def build_embed(self) -> discord.Embed:
         """Build the filter status embed with better visual hierarchy"""
@@ -272,7 +273,7 @@ class MessageSearchView(discord.ui.View):
         
         if self.reaction_filter != "any":
             reaction_text = "Has reactions" if self.reaction_filter == "has_reactions" else "No reactions"
-            parts.append(f"😊 **Reactions:** {reaction_text}")
+            parts.append(f"😊 **Reactions:** {reaction_text}") 
         
         return "\n".join(parts) if parts else "*No filters applied*"
     
@@ -544,7 +545,36 @@ async def on_reaction_remove(reaction, user):
     update_reactions(message.id, reactions_data, total_count)
     print(f"➖ Reaction removed: {reaction.emoji} on message {message.id}")
 
+#modal define here practice 
+class MyModal(discord.ui.Modal, title="simple input"):
 
+    answer=discord.ui.TextInput(
+        label="Type anything",
+        min_length=1,
+        max_length=100
+     )
+
+    async def on_submit(self,interaction: discord.Interaction):
+
+        print(f"you typed : {self.answer.value}")
+        await interaction.response.send_message(f" got the message you typed :{self.answer.value}", ephemeral=True)
+
+#button define here  practice 
+class MyButton(discord.ui.View):
+    @discord.ui.button(
+        label="click me ", 
+        style=discord.ButtonStyle.blurple
+    )
+    async def click(self, interaction:discord.Interaction,button:discord.ui.Button):
+
+        await interaction.response.send_modal(MyModal())
+        
+
+
+# here if !embed is typed it will open a form practice 
+@bot.command(name="embed")
+async def embed(ctx):
+    await ctx.send("Open form", MyButton())
 
 @bot.command(name="ping")
 async def ping(ctx):
